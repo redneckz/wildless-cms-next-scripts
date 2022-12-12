@@ -1,4 +1,3 @@
-const SELF = '@redneckz/wildless-cms-next-scripts';
 const UNI_BLOCKS_PACKAGE = '@redneckz/wildless-cms-uni-blocks';
 
 export const applyTmpl = (tmpl, valsMap, isMobile) =>
