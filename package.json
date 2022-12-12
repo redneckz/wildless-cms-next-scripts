@@ -1,0 +1,79 @@
+{
+  "name": "@redneckz/wildless-cms-next-scripts",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "author": {
+    "name": "redneckz",
+    "email": "vasyaselsky@yandex.ru"
+  },
+  "description": "Next scripts to generate Wildless CMS pages",
+  "keywords": ["wcms", "wildless-cms", "next", "scripts"],
+  "repository": {
+    "url": "https://github.com/redneckz/wildless-cms-next-scripts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/redneckz/wildless-cms-next-scripts/issues"
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=16.0.0"
+  },
+  "bin": {
+    "wcms": "./wcms.js",
+    "gz": "./gz.sh"
+  },
+  "dependencies": {
+    "@redneckz/uni-jsx": "latest",
+    "@redneckz/wildless-cms-uni-blocks": "latest",
+    "next": "^12.3.3",
+    "next-plugin-preact": "^3.0.7",
+    "next-pwa": "^5.6.0",
+    "preact": "^10.11.3",
+    "preact-render-to-string": "^5.2.6",
+    "react": "npm:@preact/compat@^17.1.2",
+    "react-dom": "npm:@preact/compat@^17.1.2",
+    "react-ssr-prepass": "npm:preact-ssr-prepass@^1.2.0"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "12.3.3",
+    "@types/node": "17.0.25",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.8",
+    "autoprefixer": "10.4.10",
+    "copyfiles": "^2.4.1",
+    "cssnano": "^5.1.14",
+    "eslint": "8.23.1",
+    "eslint-config-next": "13.0.3",
+    "eslint-config-prettier": "8.5.0",
+    "postcss": "^8.4.19",
+    "postcss-cli": "^10.1.0",
+    "postcss-import": "^15.1.0",
+    "postcss-url": "^10.1.3",
+    "rimraf": "^3.0.2",
+    "simple-git": "^3.15.1",
+    "tailwindcss": "^3.2.4",
+    "typescript": "4.7.4"
+  },
+  "peerDependencies": {
+    "@redneckz/uni-jsx": "latest",
+    "@redneckz/wildless-cms-uni-blocks": "latest",
+    "next": "^12.3.3",
+    "preact": "^10.11.3",
+    "preact-render-to-string": "^5.2.6",
+    "react": "npm:@preact/compat@^17.1.2",
+    "react-dom": "npm:@preact/compat@^17.1.2",
+    "react-ssr-prepass": "npm:preact-ssr-prepass@^1.2.0",
+    "autoprefixer": "^10.4.10",
+    "cssnano": "^5.1.14",
+    "eslint": "8.23.1",
+    "eslint-config-next": "13.0.3",
+    "eslint-config-prettier": "8.5.0",
+    "postcss": "^8.4.19",
+    "postcss-cli": "^10.1.0",
+    "postcss-import": "^15.1.0",
+    "postcss-url": "^10.1.3",
+    "tailwindcss": "^3.2.4",
+    "typescript": "4.7.4"
+  }
+}
