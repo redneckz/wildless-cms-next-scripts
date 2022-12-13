@@ -10,10 +10,14 @@ const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
 export default async function generate(isMobile) {
-  await simpleGit().clean(
-    [CleanOptions.RECURSIVE, CleanOptions.FORCE, CleanOptions.IGNORED_ONLY],
-    [PAGES_DIR],
-  );
+  try {
+    await simpleGit().clean(
+      [CleanOptions.RECURSIVE, CleanOptions.FORCE, CleanOptions.IGNORED_ONLY],
+      [PAGES_DIR],
+    );
+  } catch (ex) {
+    // Do nothing
+  }
 
   const contentPageRepository = new ContentPageRepository({
     contentDir: CONTENT_DIR,

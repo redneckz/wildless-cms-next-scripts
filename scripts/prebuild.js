@@ -9,10 +9,14 @@ const copy = promisify(copyfiles);
 
 export default async function prebuild() {
   await rmrf(BUILD_DIR);
-  await simpleGit().clean(
-    [CleanOptions.RECURSIVE, CleanOptions.FORCE, CleanOptions.IGNORED_ONLY],
-    [PUBLIC_DIR],
-  );
+  try {
+    await simpleGit().clean(
+      [CleanOptions.RECURSIVE, CleanOptions.FORCE, CleanOptions.IGNORED_ONLY],
+      [PUBLIC_DIR],
+    );
+  } catch (ex) {
+    // Do nothing
+  }
 
   await copy([`${CONTENT_DIR}/manifest.json`, `${CONTENT_DIR}/wcms-resources/**/*`, PUBLIC_DIR], 1);
   await copy(
