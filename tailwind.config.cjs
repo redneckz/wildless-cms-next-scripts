@@ -22,6 +22,12 @@ module.exports = {
     container: {
       center: true,
     },
+    data: {
+      primary: 'ver="primary"',
+      secondary: 'ver="secondary"',
+      gray: 'ver="gray"',
+      transparent: 'ver="transparent"',
+    },
     extend: {},
   },
   plugins: [],
