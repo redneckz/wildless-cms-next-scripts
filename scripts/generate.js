@@ -9,7 +9,7 @@ import { generatePage } from './generatePage.js';
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
-export default async function generate(isMobile) {
+export default async function generate(isMobile, noIndex) {
   try {
     await simpleGit().clean(
       [CleanOptions.RECURSIVE, CleanOptions.FORCE, CleanOptions.IGNORED_ONLY],
@@ -25,7 +25,11 @@ export default async function generate(isMobile) {
   });
 
   const pagePathsList = await contentPageRepository.listAllContentPages();
-  for (const pagePath of pagePathsList.filter((pagePath) => !pagePath.includes('/index'))) {
+  const pagePathsFilteredList = noIndex
+    ? pagePathsList.filter((pagePath) => !pagePath.includes('/index'))
+    : pagePathsList;
+
+  for (const pagePath of pagePathsFilteredList) {
     const page = await contentPageRepository.readPage(pagePath);
     const generatedPagePath = toGeneratedPagePath(pagePath);
 

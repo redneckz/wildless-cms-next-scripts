@@ -18,9 +18,5 @@ export default async function prebuild() {
     // Do nothing
   }
 
-  await copy([`${CONTENT_DIR}/manifest.json`, `${CONTENT_DIR}/wcms-resources/**/*`, PUBLIC_DIR], 1);
-  await copy(
-    ['./node_modules/@redneckz/wildless-cms-uni-blocks/cosmos-static/icons/**/*', PUBLIC_DIR],
-    4,
-  );
+  await copy([`${CONTENT_DIR}/wcms-resources/**/*`, PUBLIC_DIR], 1);
 }

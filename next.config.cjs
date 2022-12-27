@@ -15,4 +15,15 @@ const nextConfig = withBundleAnalyzer({
   ),
 );
 
-module.exports = nextConfig;
+module.exports = {
+  ...nextConfig,
+  async rewrites() {
+    return [
+      {
+        source: '/icons/:icon',
+        destination: 'https://redneckz.github.io/wildless-cms-uni-blocks/icons/:icon',
+        basePath: false,
+      },
+    ];
+  },
+};
