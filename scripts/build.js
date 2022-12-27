@@ -6,9 +6,9 @@ import generate from './generate.js';
 
 const rmrf = promisify(rimraf);
 
-export default async function build(isMobile) {
+export default async function build(isMobile, noIndex) {
   await rmrf('./.next');
-  await generate(isMobile);
+  await generate(isMobile, noIndex);
   execSync('npx next build', { stdio: 'inherit' });
   execSync(`npx next export -o ./${BUILD_DIR}/${isMobile ? 'mobile/' : ''}`, { stdio: 'inherit' });
 }
