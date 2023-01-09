@@ -38,6 +38,7 @@
     "autoprefixer": "^10.4.10",
     "copyfiles": "^2.4.1",
     "cssnano": "^5.1.14",
+    "dotenv": "^16.0.3",
     "eslint": "8.23.1",
     "eslint-config-next": "13.0.3",
     "eslint-config-prettier": "8.5.0",
