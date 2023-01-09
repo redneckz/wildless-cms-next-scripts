@@ -11,10 +11,12 @@ const extractAllTypes = (typeExtractor) => (slot) =>
   );
 
 export const getBlockTypes =
-  ({ blocksRegistry, typeExtractor }) =>
+  ({ blocksRegistry, typeExtractor, customBlockNames }) =>
   (page) =>
     unique(
-      extractAllTypes(typeExtractor)(page || {}).filter((type) => type && type in blocksRegistry),
+      extractAllTypes(typeExtractor)(page || {}).filter(
+        (type) => type && (type in blocksRegistry || customBlockNames?.includes(type)),
+      ),
     );
 
 function unique(list) {
