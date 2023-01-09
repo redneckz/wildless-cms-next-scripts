@@ -22,7 +22,7 @@ export const generatePage =
     })(page);
 
     const customBlockImports = customBlockTypes.map(
-      (_) => `import { ${_} } from '${CUSTOM_BLOCKS_DIR}/${_}/${_}';\n`,
+      (_) => `import { ${_} } from '../${CUSTOM_BLOCKS_DIR}/${_}/${_}';\n`,
     );
 
     const blockTypes = getBlockTypes({
