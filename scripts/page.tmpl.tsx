@@ -15,9 +15,9 @@ const blocksRegistry = {
 };
 
 useRouter.setup(() => {
-  const { asPath: pathname, ...rest } = nextUseRouter();
+  const router = nextUseRouter();
 
-  return { ...rest, pathname, href: globalThis.location?.href };
+  return { ...router, href: globalThis.location?.href };
 });
 
 const GenericPage: NextPage<{ data: ContentPageDef }> = ({ data }) => (
