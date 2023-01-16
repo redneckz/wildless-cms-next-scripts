@@ -8,6 +8,8 @@ const nextConfig = withBundleAnalyzer({
 })(
   withPWA({
     dest: 'public',
+    publicExcludes: ['!**/*'], // temp to disable precache
+    buildExcludes: [() => true], // temp to disable precache
   })(
     withPreact({
       reactStrictMode: true,
