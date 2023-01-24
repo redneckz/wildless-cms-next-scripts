@@ -1,3 +1,5 @@
+import { unique } from './unique.js';
+
 export const extractType = ({ type }) => type;
 export const extractMobileType = ({ type, mobile: { type: mobileType } = {} }) =>
   mobileType || type;
@@ -18,7 +20,3 @@ export const getBlockTypes =
         (type) => type && (type in blocksRegistry || customBlockNames?.includes(type)),
       ),
     );
-
-function unique(list) {
-  return [...new Set(list)];
-}
