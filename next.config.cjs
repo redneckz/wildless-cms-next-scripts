@@ -24,7 +24,6 @@ module.exports = {
       {
         source: '/icons/:icon',
         destination: 'https://redneckz.github.io/wildless-cms-uni-blocks/icons/:icon',
-        basePath: false,
       },
       {
         source: '/wcms-resources/:item',
