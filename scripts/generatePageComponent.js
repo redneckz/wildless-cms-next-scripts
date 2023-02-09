@@ -13,7 +13,7 @@ const pageTmpl = fs.readFileSync(new URL('./page.tmpl.tsx', import.meta.url), 'u
 
 const customBlockNames = (process.env.CUSTOM_BLOCKS_REGISTRY || '').split(/\s*,\s*/);
 
-export const generatePage =
+export const generatePageComponent =
   (isMobile = false) =>
   (page, pagePath) => {
     const customBlockTypes = getBlockTypes({
