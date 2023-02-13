@@ -11,27 +11,39 @@ const writeFile = promisify(fs.writeFile);
 
 const SEARCH_INDEX_FILENAME = 'search.index.json';
 
-export default async function generate(isMobile, noIndex) {
-  const contentPageRepository = new ContentPageRepository({
-    contentDir: CONTENT_DIR,
-    publicDir: PUBLIC_DIR,
-  });
+const contentPageRepository = new ContentPageRepository({
+  contentDir: CONTENT_DIR,
+  publicDir: PUBLIC_DIR,
+});
 
+export default async function generate(isMobile, noIndex) {
   const pagePathsList = await contentPageRepository.listAllContentPages();
-  const pagePathsFilteredList = noIndex
+  const relevantPagePaths = noIndex
     ? pagePathsList.filter((pagePath) => !pagePath.includes('/index'))
     : pagePathsList;
 
-  for (const pagePath of pagePathsFilteredList) {
-    const page = await contentPageRepository.generatePage(pagePath);
-    const generatedPagePath = toGeneratedPagePath(pagePath);
+  const pages = await Promise.all(relevantPagePaths.map(generatePageAndRelatedAssets(isMobile)));
 
-    await mkdir(path.dirname(generatedPagePath), { recursive: true });
-    await writeFile(generatedPagePath, generatePageComponent(isMobile)(page, pagePath), 'utf-8');
+  await generateSearchIndex(relevantPagePaths);
+}
+
+function generatePageAndRelatedAssets(isMobile) {
+  return async (pagePath) => {
+    const page = await contentPageRepository.generatePage(pagePath);
+
+    const generatedPageComponentPath = toGeneratedPageComponentPath(pagePath);
+    await mkdir(path.dirname(generatedPageComponentPath), { recursive: true });
+    await writeFile(
+      generatedPageComponentPath,
+      generatePageComponent(isMobile)(page, pagePath),
+      'utf-8',
+    );
 
     console.log(pagePath, 'OK');
-  }
+  };
+}
 
+async function generateSearchIndex(pagePathsList) {
   try {
     await writeFile(
       `${PUBLIC_DIR}/${SEARCH_INDEX_FILENAME}`,
@@ -45,7 +57,7 @@ export default async function generate(isMobile, noIndex) {
   }
 }
 
-function toGeneratedPagePath(pagePath) {
+function toGeneratedPageComponentPath(pagePath) {
   const extIndex = pagePath.indexOf('.');
   const withoutExt = extIndex !== -1 ? pagePath.substring(0, extIndex) : pagePath;
   const relativePath = `${path.relative(CONTENT_DIR, withoutExt)}.tsx`;

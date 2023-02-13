@@ -1,5 +1,3 @@
-import { unique } from './unique.js';
-
 export const extractType = ({ type }) => type;
 export const extractMobileType = ({ type, mobile: { type: mobileType } = {} }) =>
   mobileType || type;
@@ -12,11 +10,5 @@ const extractAllTypes = (typeExtractor) => (slot) =>
     ),
   );
 
-export const getBlockTypes =
-  ({ blocksRegistry, typeExtractor, customBlockNames }) =>
-  (page) =>
-    unique(
-      extractAllTypes(typeExtractor)(page || {}).filter(
-        (type) => type && (type in blocksRegistry || customBlockNames?.includes(type)),
-      ),
-    );
+export const getBlockTypes = (page, typeExtractor = extractType) =>
+  extractAllTypes(typeExtractor)(page || {}).filter((type) => type);
