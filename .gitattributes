@@ -13,3 +13,4 @@
 *.bin binary
 *.tgz binary
 *.zip binary
+*.pbix binary
