@@ -40,6 +40,10 @@ const MAJOR_FEATURES = [
   ['content.isSticky', (_) => Boolean(_?.content?.isSticky)],
   ['content.showCounter', (_) => Boolean(_?.content?.showCounter)],
   ['content.tabs.group', (_) => _?.content?.tabs?.some((tab) => tab?.type === 'group')],
+  [
+    'content.hiddenRowsNum',
+    (_) => _?.content?.hiddenRowsNum > 0 || _?.content?.visibleRowLength > 0,
+  ],
 ];
 
 const BLOCK_STATS_TABLE_HEAD = ['page', 'block', 'count', ...MAJOR_FEATURES.map(([name]) => name)];
