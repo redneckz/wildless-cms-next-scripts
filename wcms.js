@@ -6,10 +6,8 @@ const [, , cmd] = process.argv;
 
 const task = await import(`./scripts/${cmd}.js`);
 
-switch (cmd) {
-  case 'build':
-    await task.default(process.argv.includes('--mobile'), process.argv.includes('--no-index'));
-    break;
-  default:
-    await task.default();
-}
+await task.default({
+  isMobile: process.argv.includes('--mobile'),
+  noIndex: process.argv.includes('--no-index'),
+  sitemap: process.argv.includes('--sitemap'),
+});

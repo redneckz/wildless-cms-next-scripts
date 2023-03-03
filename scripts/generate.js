@@ -16,7 +16,7 @@ const contentPageRepository = new ContentPageRepository({
   publicDir: PUBLIC_DIR,
 });
 
-export default async function generate(isMobile, noIndex) {
+export default async function generate({ isMobile, noIndex }) {
   const pagePathsList = await contentPageRepository.listAllContentPages();
   const relevantPagePaths = noIndex
     ? pagePathsList.filter((pagePath) => !pagePath.includes('/index'))

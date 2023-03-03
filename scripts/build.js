@@ -5,10 +5,10 @@ import generate from './generate.js';
 import stats from './stats.js';
 import { gitClean } from './utils/gitClean.js';
 
-export default async function build(isMobile, noIndex) {
+export default async function build({ isMobile, noIndex, sitemap }) {
   await cleanup();
 
-  await generate(isMobile, noIndex);
+  await generate({ isMobile, noIndex });
 
   try {
     await stats();
@@ -17,6 +17,10 @@ export default async function build(isMobile, noIndex) {
   }
 
   execSync('npx next build', { stdio: 'inherit' });
+  if (sitemap) {
+    execSync('npx next-sitemap', { stdio: 'inherit' });
+  }
+
   execSync(`npx next export -o ./${BUILD_DIR}/${isMobile ? 'mobile/' : ''}`, { stdio: 'inherit' });
 }
 
