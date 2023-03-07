@@ -44,6 +44,7 @@ const MAJOR_FEATURES = [
     'content.hiddenRowsNum',
     (_) => _?.content?.hiddenRowsNum > 0 || _?.content?.visibleRowLength > 0,
   ],
+  ['content.breadcrumbs', (_) => isFilled(_?.content?.breadcrumbs)],
 ];
 
 const BLOCK_STATS_TABLE_HEAD = ['page', 'block', 'count', ...MAJOR_FEATURES.map(([name]) => name)];
