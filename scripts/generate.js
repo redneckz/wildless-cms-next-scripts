@@ -2,7 +2,7 @@ import { ContentPageRepository } from '@redneckz/wildless-cms-uni-blocks/lib/con
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
-import { CONTENT_DIR, PAGES_DIR, PUBLIC_DIR } from './dirs.js';
+import { CONTENT_DIR, PAGES_DIR, PUBLIC_DIR, LIB_DIR } from './dirs.js';
 import { generatePageComponent } from './generatePageComponent.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
 
@@ -10,6 +10,7 @@ const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
 const SEARCH_INDEX_FILENAME = 'search.index.json';
+const STYLE_IMPORT_FILENAME = 'style.js';
 
 const contentPageRepository = new ContentPageRepository({
   contentDir: CONTENT_DIR,
@@ -24,6 +25,7 @@ export default async function generate({ isMobile, noIndex }) {
 
   const pages = await Promise.all(relevantPagePaths.map(generatePageAndRelatedAssets(isMobile)));
 
+  await generateStyle(isMobile);
   await generateSearchIndex(relevantPagePaths);
 }
 
@@ -41,6 +43,21 @@ function generatePageAndRelatedAssets(isMobile) {
 
     console.log(pagePath, 'OK');
   };
+}
+
+async function generateStyle(isMobile) {
+  try {
+    if (!fs.existsSync(LIB_DIR)) {
+      await mkdir(LIB_DIR);
+    }
+    await writeFile(
+      `${LIB_DIR}/${STYLE_IMPORT_FILENAME}`,
+      `import '@redneckz/wildless-cms-uni-blocks${isMobile ? '/mobile' : ''}/lib/common.css';`,
+      'utf-8',
+    );
+  } catch (ex) {
+    console.warn('Failed to generate style import', ex);
+  }
 }
 
 async function generateSearchIndex(pagePathsList) {
