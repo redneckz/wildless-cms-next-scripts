@@ -1,4 +1,4 @@
-import { useRouter } from '@redneckz/wildless-cms-uni-blocks';
+import { useRouter } from '@redneckz/wildless-cms-uni-blocks/lib/hooks/useRouter';
 import { computeAPIFallback } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/computeAPIFallback';
 import { ContentPage } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/ContentPage';
 import { normalizePage } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/normalizePage';
