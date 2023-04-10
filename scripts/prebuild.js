@@ -18,4 +18,5 @@ export default async function prebuild() {
   }
 
   await copy([`${CONTENT_DIR}/wcms-resources/**/*`, PUBLIC_DIR], 1);
+  await copy([`${CONTENT_DIR}/portal-resources/**/*`, PUBLIC_DIR], 1);
 }
