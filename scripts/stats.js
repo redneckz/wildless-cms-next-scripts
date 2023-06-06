@@ -45,6 +45,10 @@ const MAJOR_FEATURES = [
     (_) => _?.content?.hiddenRowsNum > 0 || _?.content?.visibleRowLength > 0,
   ],
   ['content.breadcrumbs', (_) => isFilled(_?.content?.breadcrumbs)],
+  ['content.listItemSize.XS', (_) => _?.content?.listItemSize === 'XS'],
+  ['content.listItemSize.S', (_) => _?.content?.listItemSize === 'S'],
+  ['content.listItemSize.M', (_) => _?.content?.listItemSize === 'M'],
+  ['content.listItemSize.L', (_) => _?.content?.listItemSize === 'L'],
 ];
 
 const BLOCK_STATS_TABLE_HEAD = ['page', 'block', 'count', ...MAJOR_FEATURES.map(([name]) => name)];
