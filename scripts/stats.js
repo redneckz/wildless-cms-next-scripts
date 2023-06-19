@@ -13,7 +13,9 @@ const writeFile = promisify(fs.writeFile);
 const BLOCK_STATS_FILENAME = 'block.stats.csv';
 
 const MAJOR_FEATURES = [
-  ['version', (_) => isFilled(_?.version)],
+  ['version', (_) => isFilled(_?.content?.version)],
+  ['version.gray', (_) => _?.content?.version === 'gray'],
+  ['version.transparent', (_) => _?.content?.version === 'transparent'],
   ['isTheme', (_) => isFilled(_?.isTheme)],
   ['anchor', (_) => isFilled(_?.anchor)],
   ['content.title', (_) => isFilled(_?.content?.title)],
