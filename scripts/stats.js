@@ -16,6 +16,7 @@ const MAJOR_FEATURES = [
   ['version', (_) => isFilled(_?.version)],
   ['version.gray', (_) => _.version === 'gray'],
   ['version.transparent', (_) => _.version === 'transparent'],
+  ['version.primary', (_) => _.version === 'primary'],
   ['isTheme', (_) => isFilled(_?.isTheme)],
   ['anchor', (_) => isFilled(_?.anchor)],
   ['content.title', (_) => isFilled(_?.content?.title)],
