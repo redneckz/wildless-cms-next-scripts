@@ -1,4 +1,3 @@
-const withPreact = require('next-plugin-preact');
 const withPWA = require('next-pwa');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 
@@ -10,11 +9,7 @@ const nextConfig = withBundleAnalyzer({
     dest: 'public',
     publicExcludes: ['!**/*'], // temp to disable precache
     buildExcludes: [() => true], // temp to disable precache
-  })(
-    withPreact({
-      reactStrictMode: true,
-    }),
-  ),
+  })(),
 );
 
 module.exports = {
