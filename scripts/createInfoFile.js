@@ -2,6 +2,7 @@ import fs from 'fs';
 import { PUBLIC_DIR, UNIBLOCK_PACKAGE_DIR } from './dirs.js';
 
 export const createInfoFile = async () => {
+  console.log(process.env);
   const data = {
     BUILD_VER: process.env.CI_COMMIT_TAG ?? '',
     BUILD_DATE: getCurrentDateTime(),
