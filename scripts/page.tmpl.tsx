@@ -1,9 +1,9 @@
-import { useRouter } from '@redneckz/wildless-cms-uni-blocks/lib/hooks/useRouter';
-import { computeAPIFallback } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/computeAPIFallback';
 import { ContentPage } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/ContentPage';
+import { computeAPIFallback } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/computeAPIFallback';
 import { normalizePage } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/normalizePage';
 import { renderContentPageHead } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/renderContentPageHead';
 import { ContentPageRepository } from '@redneckz/wildless-cms-uni-blocks/lib/content-page-repository';
+import { useRouter } from '@redneckz/wildless-cms-uni-blocks/lib/hooks/useRouter';
 import type { ContentPageDef } from '@redneckz/wildless-cms-uni-blocks/lib/model/ContentPageDef';
 import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';

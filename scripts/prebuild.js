@@ -1,6 +1,6 @@
 import copyfiles from 'copyfiles';
 import { promisify } from 'util';
-import { createInfoFile } from './createInfoFile.js';
+import  createInfoFile from './createInfoFile.js';
 import { BUILD_DIR, CONTENT_DIR, NEXT_DIR, PAGES_DIR, PUBLIC_DIR } from './dirs.js';
 import removeDetached from './removeDetached.js';
 import { gitClean } from './utils/gitClean.js';

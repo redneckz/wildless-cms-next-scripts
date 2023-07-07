@@ -3,7 +3,7 @@ import { PUBLIC_DIR, UNIBLOCK_PACKAGE_DIR } from './dirs.js';
 
 const MOSCOW_TIME_OFFSET = 3;
 
-export const createInfoFile = async () => {
+export default async function createInfoFile() {
   const data = {
     BUILD_VER: process.env.npm_package_version ?? '',
     BUILD_DATE: getCurrentDateTime(),
@@ -16,7 +16,7 @@ export const createInfoFile = async () => {
   } catch (error) {
     console.error(`Error while save info file: ${error}`);
   }
-};
+}
 
 const getCurrentVersionUniBlocks = async () => {
   try {
