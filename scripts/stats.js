@@ -51,6 +51,7 @@ const MAJOR_FEATURES = [
   ['content.listItemSize.S', (_) => _?.content?.listItemSize === 'S'],
   ['content.listItemSize.M', (_) => _?.content?.listItemSize === 'M'],
   ['content.listItemSize.L', (_) => _?.content?.listItemSize === 'L'],
+  ['content.items', (_) => _?.content?.items],
 ];
 
 const BLOCK_STATS_TABLE_HEAD = ['page', 'block', 'count', ...MAJOR_FEATURES.map(([name]) => name)];
