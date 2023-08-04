@@ -11,15 +11,17 @@ const writeFile = promisify(fs.writeFile);
 
 const SEARCH_INDEX_FILENAME = 'search.index.json';
 
+const customPagePaths = (process.env.CUSTOM_PAGE_PATHS_REGISTRY || '').split(',');
+
 const contentPageRepository = new ContentPageRepository({
   contentDir: CONTENT_DIR,
   publicDir: PUBLIC_DIR,
 });
 
-export default async function generate({ isMobile, noIndex }) {
+export default async function generate({ isMobile }) {
   const pagePathsList = await contentPageRepository.listAllContentPages();
-  const relevantPagePaths = noIndex
-    ? pagePathsList.filter((pagePath) => !pagePath.includes('/index'))
+  const relevantPagePaths = customPagePaths.length
+    ? pagePathsList.filter((pagePath) => !customPagePaths.includes(pagePath))
     : pagePathsList;
 
   const pages = await Promise.all(relevantPagePaths.map(generatePageAndRelatedAssets(isMobile)));

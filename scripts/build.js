@@ -5,10 +5,10 @@ import generate from './generate.js';
 import stats from './stats.js';
 import { gitClean } from './utils/gitClean.js';
 
-export default async function build({ isMobile, noIndex, sitemap }) {
+export default async function build({ isMobile, sitemap }) {
   await cleanup();
 
-  await generate({ isMobile, noIndex });
+  await generate({ isMobile });
 
   try {
     await stats();

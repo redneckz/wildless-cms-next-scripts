@@ -8,6 +8,5 @@ const task = await import(`./scripts/${cmd}.js`);
 
 await task.default({
   isMobile: process.argv.includes('--mobile'),
-  noIndex: process.argv.includes('--no-index'),
   sitemap: process.argv.includes('--sitemap'),
 });
