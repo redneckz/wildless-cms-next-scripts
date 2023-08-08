@@ -34,7 +34,7 @@ export const getStaticProps: GetStaticProps = async () => {
     await ContentPageRepository.inst.readPage('/* pagePath */'),
   );
   const props = {
-    data: { ...data, fallback: (await computeAPIFallback(blocksRegistry)) || {} },
+    data: { ...data, fallback: (await computeAPIFallback(blocksRegistry, data)) || {} },
   };
 
   return { props };
