@@ -1,9 +1,9 @@
 import { execSync } from 'child_process';
 import { BUILD_DIR, NEXT_DIR, PAGES_DIR } from './dirs.js';
-import { rmrf } from './utils/rmrf.js';
 import generate from './generate.js';
 import stats from './stats.js';
 import { gitClean } from './utils/gitClean.js';
+import { rmrf } from './utils/rmrf.js';
 
 export default async function build({ isMobile, sitemap }) {
   await cleanup();
