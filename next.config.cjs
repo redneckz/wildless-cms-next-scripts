@@ -18,11 +18,16 @@ module.exports = {
     return [
       {
         source: '/icons/:icon',
-        destination: 'https://redneckz.github.io/wildless-cms-uni-blocks/icons/:icon',
+        destination: 'https://www.rshb.ru/icons/:icon',
       },
       {
         source: '/wcms-resources/:item',
-        destination: 'https://redneckz.github.io/wildless-cms-uni-blocks/wcms-resources/:item',
+        destination: 'https://www.rshb.ru/wcms-resources/:item',
+        basePath: false,
+      },
+      {
+        source: '/api/v1/:item',
+        destination: 'https://www.rshb.ru/api/v1/:item',
         basePath: false,
       },
     ];
