@@ -27,7 +27,8 @@
   "bin": {
     "wcms": "./wcms.js",
     "gz": "./gz.sh",
-    "gzip.js": "./gzip.js"
+    "gzip.js": "./gzip.js",
+    "cleanup": "./cleanup.sh"
   },
   "dependencies": {
     "@next/bundle-analyzer": "12.3.3",
