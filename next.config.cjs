@@ -26,8 +26,8 @@ module.exports = {
         basePath: false,
       },
       {
-        source: '/api/v1/:item',
-        destination: 'https://www.rshb.ru/api/v1/:item',
+        source: '/api/v1/:item*',
+        destination: 'https://www.rshb.ru/api/v1/:item*',
         basePath: false,
       },
     ];
