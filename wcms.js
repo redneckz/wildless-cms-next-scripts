@@ -7,7 +7,8 @@ const [, , cmd] = process.argv;
 
 const task = timed(cmd, (await import(`./scripts/${cmd}.js`)).default);
 
-await task({
-  isMobile: process.argv.includes('--mobile'),
-  sitemap: process.argv.includes('--sitemap'),
-});
+await task(
+  Object.fromEntries(
+    process.argv.filter((_) => _.startsWith('--')).map((_) => [_.substring('--'.length), true]),
+  ),
+);

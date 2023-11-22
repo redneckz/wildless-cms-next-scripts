@@ -65,7 +65,7 @@ const contentPageRepository = new ContentPageRepository({
 });
 
 export default async function stats() {
-  const pagePathsList = await contentPageRepository.listAllContentPages();
+  const pagePathsList = await contentPageRepository.listAllPages();
   const pages = (
     await Promise.allSettled(pagePathsList.map((_) => contentPageRepository.readPage(_)))
   )
