@@ -1,3 +1,4 @@
+import { getBasePath } from '@redneckz/wildless-cms-uni-blocks/lib/utils/getBasePath';
 import path from 'path';
 import { CONTENT_DIR } from '../dirs.js';
 import PorterStemmerRu from './stemmer.cjs';
@@ -26,7 +27,9 @@ export async function getSearchIndex(pagesPathsList, readPage) {
 }
 
 function getPageURI(pagePath, slug) {
-  return path.join(path.dirname(path.relative(CONTENT_DIR, pagePath)), slug);
+  const basePath = getBasePath(process.env.NEXT_PUBLIC_SITE_URL);
+
+  return path.join(basePath, path.dirname(path.relative(CONTENT_DIR, pagePath)), slug);
 }
 
 function extractTokens(data) {
