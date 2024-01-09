@@ -1,14 +1,23 @@
 import { ContentPageRepository } from '@redneckz/wildless-cms-uni-blocks/lib/content-page-repository';
 import fs from 'fs';
+import glob from 'glob';
 import path from 'path';
 import { promisify } from 'util';
-import { CONTENT_DIR, PAGES_DIR, PUBLIC_DIR } from './dirs.js';
+import {
+  CONTENT_DIR,
+  PAGES_DIR,
+  PORTAL_RESOURCES_DIR,
+  PUBLIC_DIR,
+  WCMS_RESOURCES_DIR,
+} from './dirs.js';
 import { generatePageComponent } from './generatePageComponent.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
 
+const findFiles = promisify(glob);
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
+const EXT = '.json';
 const SEARCH_INDEX_FILENAME = 'search.index.json';
 
 const customPagePaths = (process.env.CUSTOM_PAGE_PATHS_REGISTRY || '').split(',');
@@ -25,6 +34,11 @@ export default async function generate({ isMobile }) {
     : pagePathsList;
 
   const pages = await Promise.all(relevantPagePaths.map(generatePageAndRelatedAssets(isMobile)));
+
+  const resourcesPaths = await getResourcesPaths();
+  for (const resourcesPath of resourcesPaths) {
+    await generateResource(resourcesPath);
+  }
 
   await generateSearchIndex(relevantPagePaths);
 }
@@ -43,6 +57,21 @@ function generatePageAndRelatedAssets(isMobile) {
 
     console.log(pagePath, 'OK');
   };
+}
+
+export async function getResourcesPaths() {
+  return findFiles(`{${WCMS_RESOURCES_DIR},${PORTAL_RESOURCES_DIR}}/**/*${EXT}`);
+}
+
+async function generateResource(filePath) {
+  const page = await contentPageRepository.generatePage(filePath);
+
+  const resourcePath = path.join(PUBLIC_DIR, path.relative(CONTENT_DIR, filePath));
+
+  await mkdir(path.dirname(resourcePath), { recursive: true });
+  await writeFile(resourcePath, JSON.stringify(page), 'utf-8');
+
+  console.log(filePath, 'OK');
 }
 
 async function generateSearchIndex(pagePathsList) {

@@ -1,7 +1,15 @@
 import copyfiles from 'copyfiles';
 import { promisify } from 'util';
-import  createInfoFile from './createInfoFile.js';
-import { BUILD_DIR, CONTENT_DIR, NEXT_DIR, PAGES_DIR, PUBLIC_DIR } from './dirs.js';
+import createInfoFile from './createInfoFile.js';
+import {
+  BUILD_DIR,
+  CONTENT_DIR,
+  NEXT_DIR,
+  PAGES_DIR,
+  PORTAL_RESOURCES_DIR,
+  PUBLIC_DIR,
+  WCMS_RESOURCES_DIR,
+} from './dirs.js';
 import removeDetached from './removeDetached.js';
 import { gitClean } from './utils/gitClean.js';
 import { rmrf } from './utils/rmrf.js';
@@ -20,6 +28,6 @@ export default async function prebuild() {
 
   await createInfoFile();
 
-  await copy([`${CONTENT_DIR}/wcms-resources/**/*`, PUBLIC_DIR], 1);
-  await copy([`${CONTENT_DIR}/portal-resources/**/*`, PUBLIC_DIR], 1);
+  await copy([`${WCMS_RESOURCES_DIR}/**/*`, PUBLIC_DIR], 1);
+  await copy([`${PORTAL_RESOURCES_DIR}/**/*`, PUBLIC_DIR], 1);
 }
