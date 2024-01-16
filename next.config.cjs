@@ -19,6 +19,7 @@ module.exports = {
       {
         source: '/icons/:icon',
         destination: 'https://www.rshb.ru/icons/:icon',
+        basePath: false,
       },
       {
         source: '/wcms-resources/:item',
