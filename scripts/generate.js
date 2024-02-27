@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { promisify } from 'util';
 import { contentPageRepository } from './utils/contentPageRepository.js';
-import { PUBLIC_DIR } from './utils/env.js';
+import { CUSTOM_SLUGS_REGISTRY, PUBLIC_DIR } from './utils/env.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
 
 const writeFile = promisify(fs.writeFile);
@@ -12,8 +12,13 @@ const PATH_DELIMITER = '/';
 export default async function generate() {
   const allSlugs = await contentPageRepository.listAllSlugs();
 
+  const relevantSlugs = allSlugs.filter(
+    (slug) =>
+      !CUSTOM_SLUGS_REGISTRY.some((customSlug) => slug.every((_, i) => customSlug[i] === _)),
+  );
+
   const pages = await Promise.all(
-    allSlugs
+    relevantSlugs
       .map(async (slug) => {
         try {
           console.log(slug, 'OK');

@@ -31,26 +31,22 @@ const devRewrites = [
  */
 module.exports = async (phase, defaultConfig) => {
   const { computeEnv } = await import('./scripts/utils/computeEnv.js');
+  const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
   const { BUILD_DIR } = await import('./scripts/dirs.js');
-
-  /** @type {import('next').NextConfig} */
-  const staticConfig = process.env.EXPORT
-    ? {
-        output: 'export',
-        distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
-      }
-    : {};
+  const { FILE_STORAGE_BASE_URL, WCMS_RESOURCES_BASE_URL } = await import('./scripts/utils/env.js');
 
   /** @type {import('next').NextConfig} */
   const nextConfig = withBundleAnalyzer({
     enabled: process.env.ANALYZE === 'true',
   })({
     poweredByHeader: false,
-    ...staticConfig,
     ...defaultConfig,
     env: {
       ...defaultConfig?.env,
       ENV_STAND: computeEnv(),
+      EXTRA_PATHS: await getExtraPages(),
+      BUILD__FILE_STORAGE_BASE_URL: FILE_STORAGE_BASE_URL,
+      BUILD__WCMS_RESOURCES_BASE_URL: WCMS_RESOURCES_BASE_URL,
     },
     async rewrites() {
       const configRewrites = (await defaultConfig?.rewrites?.()) ?? [];
