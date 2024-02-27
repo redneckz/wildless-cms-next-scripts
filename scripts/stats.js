@@ -1,16 +1,17 @@
-import { Blocks } from '@redneckz/wildless-cms-uni-blocks/lib/components/Blocks';
-import { ContentPageRepository } from '@redneckz/wildless-cms-uni-blocks/lib/content-page-repository';
-import { Blocks as MobileBlocks } from '@redneckz/wildless-cms-uni-blocks/mobile/lib/components/Blocks';
 import fs from 'fs';
 import { promisify } from 'util';
-import { CONTENT_DIR, PUBLIC_DIR } from './dirs.js';
+import { CONTENT_DIR, PUBLIC_DIR, UNIBLOCK_PACKAGE_DIR } from './utils/env.js';
+import { contentPageRepository } from './utils/contentPageRepository.js';
 import { isFilled } from './utils/isFilled.js';
 import { listBlocks } from './utils/listBlocks.js';
 import { unique } from './utils/unique.js';
 
 const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
 
 const BLOCK_STATS_FILENAME = 'block.stats.csv';
+
+const PAGE_EXT = '.page.json';
 
 const MAJOR_FEATURES = [
   ['version', (_) => isFilled(_?.content?.version)],
@@ -57,17 +58,20 @@ const MAJOR_FEATURES = [
 
 const BLOCK_STATS_TABLE_HEAD = ['page', 'block', 'count', ...MAJOR_FEATURES.map(([name]) => name)];
 
-const AllBlockTypes = unique(Object.keys(Blocks).concat(Object.keys(MobileBlocks)));
-
-const contentPageRepository = new ContentPageRepository({
-  contentDir: CONTENT_DIR,
-  publicDir: PUBLIC_DIR,
-});
+const AllBlockTypes = unique(
+  await Promise.allSettled(
+    ['/lib/components/Blocks.js', '/mobile/lib/components/Blocks.js'].map((_) =>
+      readFile(`${UNIBLOCK_PACKAGE_DIR}${_}`, 'utf-8'),
+    ),
+  ),
+)
+  .filter(({ status }) => status === 'fulfilled')
+  .flatMap(({ value }) => value.match(/\w+(?=,|\r*})/g));
 
 export default async function stats() {
-  const pagePathsList = await contentPageRepository.listAllPages();
+  const pagePathsList = await contentPageRepository.listFiles({ dir: CONTENT_DIR, ext: PAGE_EXT });
   const pages = (
-    await Promise.allSettled(pagePathsList.map((_) => contentPageRepository.readPage(_)))
+    await Promise.allSettled(pagePathsList.map((_) => contentPageRepository.readJSON(_)))
   )
     .filter(({ status }) => status === 'fulfilled')
     .map(({ value }) => value);

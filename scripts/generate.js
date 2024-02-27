@@ -1,53 +1,43 @@
-import { ContentPageRepository } from '@redneckz/wildless-cms-uni-blocks/lib/content-page-repository';
 import fs from 'fs';
 import { promisify } from 'util';
-import { CONTENT_DIR, PUBLIC_DIR } from './dirs.js';
+import { contentPageRepository } from './utils/contentPageRepository.js';
+import { CUSTOM_SLUGS_REGISTRY, PUBLIC_DIR } from './utils/env.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
 
 const writeFile = promisify(fs.writeFile);
 
-const EXT = '.json';
 const SEARCH_INDEX_FILENAME = 'search.index.json';
-
-const customPagePaths = (process.env.CUSTOM_PAGE_PATHS_REGISTRY || '').split(',');
-
-const contentPageRepository = new ContentPageRepository({
-  contentDir: CONTENT_DIR,
-  publicDir: PUBLIC_DIR,
-});
+const PATH_DELIMITER = '/';
 
 export default async function generate() {
-  const pagePathsList = await contentPageRepository.listAllPages();
-  const relevantPagePaths = customPagePaths.length
-    ? pagePathsList.filter((pagePath) => !customPagePaths.includes(pagePath))
-    : pagePathsList;
+  const allSlugs = await contentPageRepository.listAllSlugs();
 
-  await Promise.all(
-    relevantPagePaths.map(async (pagePath) => {
-      try {
-        await contentPageRepository.generatePage(pagePath);
-        console.log(pagePath, 'OK');
-      } catch (ex) {
-        console.warn(`Failed to generate assets for ${pagePath}`, ex);
-      }
-    }),
+  const relevantSlugs = allSlugs.filter(
+    (slug) =>
+      !CUSTOM_SLUGS_REGISTRY.some((customSlug) => slug.every((_, i) => customSlug[i] === _)),
   );
 
-  const resourcesPaths = await getResourcesPaths();
-  for (const resourcesPath of resourcesPaths) {
-    await generateResource(resourcesPath);
-  }
+  const pages = await Promise.all(
+    relevantSlugs
+      .map(async (slug) => {
+        try {
+          console.log(slug, 'OK');
+          return [slug.join(PATH_DELIMITER), await contentPageRepository.generatePage(slug)];
+        } catch (ex) {
+          console.warn('Failed to generate assets for', slug, ex);
+        }
+      })
+      .filter(Boolean),
+  );
 
-  await generateSearchIndex(relevantPagePaths);
+  await generateSearchIndex(pages);
 }
 
-async function generateSearchIndex(pagePathsList) {
+async function generateSearchIndex(pages) {
   try {
     await writeFile(
       `${PUBLIC_DIR}/${SEARCH_INDEX_FILENAME}`,
-      JSON.stringify(
-        await getSearchIndex(pagePathsList, (pagePath) => contentPageRepository.readPage(pagePath)),
-      ),
+      JSON.stringify(await getSearchIndex(pages)),
       'utf-8',
     );
   } catch (ex) {

@@ -2,7 +2,7 @@ import fs from 'fs';
 import glob from 'glob';
 import { basename } from 'path';
 import { promisify } from 'util';
-import { CONTENT_DIR } from './dirs.js';
+import { CONTENT_DIR } from './utils/env.js';
 
 const findFiles = promisify(glob);
 const readFile = promisify(fs.readFile);

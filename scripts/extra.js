@@ -1,6 +1,6 @@
 import copyfiles from 'copyfiles';
 import { promisify } from 'util';
-import { EXTRA_DIR, PUBLIC_DIR } from './dirs.js';
+import { EXTRA_DIR, PUBLIC_DIR } from './utils/env.js';
 
 const copy = promisify(copyfiles);
 

@@ -3,7 +3,7 @@ import copyExtra from './extra.js';
 import generate from './generate.js';
 import stats from './stats.js';
 
-export default async function build({ gen, extra, sitemap }) {
+export default async function build({ gen, extra }) {
   try {
     await stats();
   } catch (ex) {
@@ -19,7 +19,4 @@ export default async function build({ gen, extra, sitemap }) {
   }
 
   execSync('npx next build', { stdio: 'inherit' });
-  if (sitemap) {
-    execSync('npx next-sitemap', { stdio: 'inherit' });
-  }
 }
