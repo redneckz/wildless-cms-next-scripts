@@ -11,5 +11,5 @@ export const computeFileStorageBaseUrl = () => {
     return process.env.FILE_STORAGE_BASE_URL_RC;
   }
 
-  return process.env.FILE_STORAGE_BASE_URL_DEV;
+  return process.env.FILE_STORAGE_BASE_URL_DEV || process.env.FILE_STORAGE_BASE_URL;
 };
