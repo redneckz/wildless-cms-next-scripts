@@ -42,6 +42,7 @@ module.exports = async (config) => {
   const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
 
   return {
+    poweredByHeader: false,
     ...nextConfig,
     ...config,
     env: {
