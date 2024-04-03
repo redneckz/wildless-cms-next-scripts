@@ -40,6 +40,7 @@ const nextConfig = withBundleAnalyzer({
  */
 module.exports = async (config) => {
   const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
+  const { FILE_STORAGE_BASE_URL, WCMS_RESOURCES_BASE_URL } = await import('./scripts/utils/env.js');
 
   return {
     poweredByHeader: false,
@@ -48,6 +49,8 @@ module.exports = async (config) => {
     env: {
       ...config?.env,
       EXTRA_PATHS: await getExtraPages(),
+      FILE_STORAGE_BASE_URL,
+      WCMS_RESOURCES_BASE_URL,
     },
     async rewrites() {
       const configRewrites = (await config?.rewrites?.()) ?? [];
