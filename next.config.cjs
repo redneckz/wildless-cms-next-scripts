@@ -32,7 +32,6 @@ const devRewrites = [
 module.exports = async (phase, defaultConfig) => {
   const { computeEnv } = await import('./scripts/utils/computeEnv.js');
   const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
-  const { BUILD_DIR } = await import('./scripts/dirs.js');
   const { FILE_STORAGE_BASE_URL, WCMS_RESOURCES_BASE_URL } = await import('./scripts/utils/env.js');
 
   /** @type {import('next').NextConfig} */
