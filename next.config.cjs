@@ -49,8 +49,8 @@ module.exports = async (config) => {
     env: {
       ...config?.env,
       EXTRA_PATHS: await getExtraPages(),
-      FILE_STORAGE_BASE_URL,
-      WCMS_RESOURCES_BASE_URL,
+      BUILD__FILE_STORAGE_BASE_URL: FILE_STORAGE_BASE_URL,
+      BUILD__WCMS_RESOURCES_BASE_URL: WCMS_RESOURCES_BASE_URL,
     },
     async rewrites() {
       const configRewrites = (await config?.rewrites?.()) ?? [];
