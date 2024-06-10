@@ -62,7 +62,7 @@
   "peerDependencies": {
     "@redneckz/uni-jsx": "latest",
     "@redneckz/wildless-cms-content": "latest",
-    "@redneckz/wildless-cms-uni-blocks": "^0.15.0-beta",
+    "@redneckz/wildless-cms-uni-blocks": "^0.16.1",
     "autoprefixer": "^10.4.10",
     "cssnano": "^5.1.14",
     "eslint": "8.23.1",
