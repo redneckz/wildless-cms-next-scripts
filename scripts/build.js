@@ -1,30 +1,24 @@
 import { execSync } from 'child_process';
-import { BUILD_DIR, NEXT_DIR, PAGES_DIR } from './dirs.js';
+import copyExtra from './extra.js';
 import generate from './generate.js';
 import stats from './stats.js';
-import { gitClean } from './utils/gitClean.js';
-import { rmrf } from './utils/rmrf.js';
 
-export default async function build({ isMobile, sitemap }) {
-  await cleanup();
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; //? Only for build
 
-  await generate({ isMobile });
-
+export default async function build({ gen, extra }) {
   try {
     await stats();
   } catch (ex) {
     console.warn('Failed to generate stats', ex);
   }
 
-  execSync('npx next build', { stdio: 'inherit' });
-  if (sitemap) {
-    execSync('npx next-sitemap', { stdio: 'inherit' });
+  if (gen) {
+    await generate();
   }
 
-  execSync(`npx next export -o ./${BUILD_DIR}/${isMobile ? 'mobile/' : ''}`, { stdio: 'inherit' });
-}
+  if (extra) {
+    await copyExtra();
+  }
 
-async function cleanup() {
-  await rmrf(NEXT_DIR);
-  await gitClean(PAGES_DIR);
+  execSync('npx next build', { stdio: 'inherit' });
 }
