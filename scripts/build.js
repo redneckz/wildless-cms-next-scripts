@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { BUILD_DIR, NEXT_DIR, PAGES_DIR } from './dirs.js';
+import { NEXT_DIR, PAGES_DIR } from './dirs.js';
 import generate from './generate.js';
 import stats from './stats.js';
 import { gitClean } from './utils/gitClean.js';
@@ -20,8 +20,6 @@ export default async function build({ isMobile, sitemap }) {
   if (sitemap) {
     execSync('npx next-sitemap', { stdio: 'inherit' });
   }
-
-  execSync(`npx next export -o ./${BUILD_DIR}/${isMobile ? 'mobile/' : ''}`, { stdio: 'inherit' });
 }
 
 async function cleanup() {
