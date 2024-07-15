@@ -3,20 +3,22 @@ const withBundleAnalyzer = require('@next/bundle-analyzer');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
+const proxyServer = 'http://localhost:7001';
+
 const devRewrites = [
   {
     source: '/icons/:icon',
-    destination: 'https://www.rshb.ru/icons/:icon',
+    destination: `${proxyServer}/icons/:icon`,
     basePath: false,
   },
   {
     source: '/wcms-resources/:item',
-    destination: 'https://www.rshb.ru/wcms-resources/:item',
+    destination: `${proxyServer}/wcms-resources/:item`,
     basePath: false,
   },
   {
     source: '/api/v1/:item*',
-    destination: 'https://www.rshb.ru/api/v1/:item*',
+    destination: `${proxyServer}/api/v1/:item*`,
     basePath: false,
   },
 ];
