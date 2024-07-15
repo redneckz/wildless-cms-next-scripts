@@ -1,8 +1,8 @@
-const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-const https = require('https');
+import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import https from 'https';
 
-export const PORT = 7001;
+const PORT = 7001;
 const PROXY_HOST = 'https://10.80.4.9';
 
 const app = express();
@@ -17,7 +17,7 @@ const proxyConfig = [
   { path: '/api/v1', target: PROXY_HOST },
 ];
 
-for (const { path, target } in proxyConfig) {
+for (const { path, target } of proxyConfig) {
   app.use(
     path,
     createProxyMiddleware({
@@ -29,7 +29,8 @@ for (const { path, target } in proxyConfig) {
     }),
   );
 }
-
-app.listen(PORT, () => {
-  console.log(`Proxy server is running on port ${PORT}`);
-});
+export default function proxyServer() {
+  app.listen(PORT, () => {
+    console.log(`Proxy server is running on port ${PORT}`);
+  });
+}
