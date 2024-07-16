@@ -1,3 +1,5 @@
+// @ts-check
+
 const withPWA = require('next-pwa');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 
@@ -5,6 +7,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 const proxyServer = 'http://localhost:7001';
 
+/** @type {import('next/dist/lib/load-custom-routes').Rewrite[]} */
 const devRewrites = [
   {
     source: '/icons/:icon',
@@ -32,27 +35,26 @@ const nextConfig = withBundleAnalyzer({
     dest: 'public',
     publicExcludes: ['!**/*'], // temp to disable precache
     buildExcludes: [() => true], // temp to disable precache
-  })(),
+  }),
 );
 
 /**
  *
- * @param {import('next').NextConfig} config
- * @returns {import('next').NextConfig}
+ * @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>}
  */
-module.exports = async (config) => {
+module.exports = async (_, defaultConfig) => {
   const { computeEnv } = await import('./scripts/utils/computeEnv.js');
 
   return {
     poweredByHeader: false,
     ...nextConfig,
-    ...config,
+    ...defaultConfig,
     env: {
-      ...config?.env,
+      ...defaultConfig?.env,
       ENV_STAND: computeEnv(),
     },
     async rewrites() {
-      const configRewrites = (await config?.rewrites?.()) ?? [];
+      const configRewrites = (await defaultConfig?.rewrites?.()) ?? [];
 
       const combineRewrites = Array.isArray(configRewrites)
         ? [...configRewrites, ...devRewrites]

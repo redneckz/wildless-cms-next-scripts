@@ -1,6 +1,6 @@
 import { ContentPageRepository } from '@redneckz/wildless-cms-uni-blocks/lib/content-page-repository';
 import fs from 'fs';
-import glob from 'glob';
+import { glob } from 'glob';
 import path from 'path';
 import { promisify } from 'util';
 import {
@@ -13,7 +13,6 @@ import {
 import { generatePageComponent } from './generatePageComponent.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
 
-const findFiles = promisify(glob);
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
@@ -60,7 +59,7 @@ function generatePageAndRelatedAssets(isMobile) {
 }
 
 export async function getResourcesPaths() {
-  return findFiles(`{${WCMS_RESOURCES_DIR},${PORTAL_RESOURCES_DIR}}/**/*${EXT}`);
+  return glob(`{${WCMS_RESOURCES_DIR},${PORTAL_RESOURCES_DIR}}/**/*${EXT}`);
 }
 
 async function generateResource(filePath) {
