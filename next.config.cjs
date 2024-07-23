@@ -3,11 +3,6 @@
 const { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } = require('next/constants');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 
-// You may want to use a more robust revision to cache
-// files more efficiently.
-// A viable option is `git rev-parse HEAD`.
-const revision = crypto.randomUUID();
-
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 const proxyServer = 'http://localhost:7001';
@@ -76,7 +71,6 @@ module.exports = async (phase, defaultConfig) => {
       cacheOnNavigation: true,
       swSrc: 'src/sw.ts',
       swDest: 'public/sw.js',
-      additionalPrecacheEntries: [{ url: '/~offline', revision }],
     });
     return withSerwist(nextConfig);
   }
