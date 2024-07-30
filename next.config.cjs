@@ -1,65 +1,28 @@
-const withPWA = require('next-pwa');
+// @ts-check
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 
-const isDevelopment = process.env.NODE_ENV === 'development';
-
-const devRewrites = [
-  {
-    source: '/icons/:icon',
-    destination: 'https://www.rshb.ru/icons/:icon',
-    basePath: false,
-  },
-  {
-    source: '/wcms-resources/:item',
-    destination: 'https://www.rshb.ru/wcms-resources/:item',
-    basePath: false,
-  },
-  {
-    source: '/api/v1/:item*',
-    destination: 'https://www.rshb.ru/api/v1/:item*',
-    basePath: false,
-  },
-];
-
 /** @type {import('next').NextConfig} */
-const nextConfig = withBundleAnalyzer({
+const config = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
-})(
-  withPWA({
-    disable: isDevelopment,
-    dest: 'public',
-    publicExcludes: ['!**/*'], // temp to disable precache
-    buildExcludes: [() => true], // temp to disable precache
-  })(),
-);
+});
 
 /**
  *
- * @param {import('next').NextConfig} config
- * @returns {import('next').NextConfig}
+ * @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>}
  */
-module.exports = async (config) => {
-  const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
-  const { FILE_STORAGE_BASE_URL, WCMS_RESOURCES_BASE_URL } = await import('./scripts/utils/env.js');
+module.exports = async (phase, defaultConfig) => {
+  const { BUILD_DIR } = await import('./scripts/utils/env.js');
 
-  return {
+  /** @type {import('next').NextConfig} */
+  const exportConfig = process.env.EXPORT ? { distDir: `./${BUILD_DIR}`, output: 'export' } : {};
+
+  /** @type {import('next').NextConfig} */
+  const nextConfig = {
     poweredByHeader: false,
-    ...nextConfig,
+    ...exportConfig,
     ...config,
-    env: {
-      ...config?.env,
-      EXTRA_PATHS: await getExtraPages(),
-      BUILD__FILE_STORAGE_BASE_URL: FILE_STORAGE_BASE_URL,
-      BUILD__WCMS_RESOURCES_BASE_URL: WCMS_RESOURCES_BASE_URL,
-    },
-    async rewrites() {
-      const configRewrites = (await config?.rewrites?.()) ?? [];
-
-      const combineRewrites = Array.isArray(configRewrites)
-        ? [...configRewrites, ...devRewrites]
-        : { ...configRewrites, beforeFiles: [...configRewrites.beforeFiles, ...devRewrites] };
-
-      return isDevelopment ? combineRewrites : configRewrites;
-    },
+    ...defaultConfig,
   };
+
+  return nextConfig;
 };
