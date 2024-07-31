@@ -66,7 +66,10 @@ module.exports = async (phase, defaultConfig) => {
   if (phase === PHASE_DEVELOPMENT_SERVER || phase === PHASE_PRODUCTION_BUILD) {
     const withPWA = require('@ducanh2912/next-pwa').default({
       dest: 'public',
-      publicExcludes: ['!**/*'], // temp to disable precache
+      publicExcludes: ['!**/*'],
+      workboxOptions: {
+        exclude: [() => true],
+      },
     });
 
     return withPWA(nextConfig);
