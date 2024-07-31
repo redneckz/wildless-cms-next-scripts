@@ -1,5 +1,4 @@
 // @ts-check
-
 const { PHASE_DEVELOPMENT_SERVER, PHASE_PRODUCTION_BUILD } = require('next/constants');
 const withBundleAnalyzer = require('@next/bundle-analyzer');
 
@@ -26,11 +25,6 @@ const devRewrites = [
   },
 ];
 
-/** @type {import('next').NextConfig} */
-const config = withBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})();
-
 /**
  *
  * @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>}
@@ -40,16 +34,19 @@ module.exports = async (phase, defaultConfig) => {
   const { BUILD_DIR } = await import('./scripts/dirs.js');
 
   /** @type {import('next').NextConfig} */
-  const staticConfig = {
-    output: 'export',
-    distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
-  };
+  const staticConfig = process.env.EXPORT
+    ? {
+        output: 'export',
+        distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
+      }
+    : {};
 
   /** @type {import('next').NextConfig} */
-  const nextConfig = {
-    ...(isDevelopment ? {} : staticConfig),
+  const nextConfig = withBundleAnalyzer({
+    enabled: process.env.ANALYZE === 'true',
+  })({
     poweredByHeader: false,
-    ...config,
+    ...staticConfig,
     ...defaultConfig,
     env: {
       ...defaultConfig?.env,
@@ -64,15 +61,15 @@ module.exports = async (phase, defaultConfig) => {
 
       return isDevelopment ? combineRewrites : configRewrites;
     },
-  };
+  });
 
   if (phase === PHASE_DEVELOPMENT_SERVER || phase === PHASE_PRODUCTION_BUILD) {
-    const withSerwist = (await import('@serwist/next')).default({
-      cacheOnNavigation: true,
-      swSrc: 'src/sw.ts',
-      swDest: 'public/sw.js',
+    const withPWA = require('@ducanh2912/next-pwa').default({
+      dest: 'public',
+      publicExcludes: ['!**/*'], // temp to disable precache
     });
-    return withSerwist(nextConfig);
+
+    return withPWA(nextConfig);
   }
 
   return nextConfig;
