@@ -1,19 +1,18 @@
 import dotenv from 'dotenv';
+import { computeEnv } from './computeEnv.js';
 
 dotenv.config({ path: ['.env.local', '.env'] });
-
-const tag = process.env.npm_package_version ?? '0.0.0-local';
 
 export const getFileStorageBaseUrl = () => process.env.FILE_STORAGE_BASE_URL ?? compute();
 
 const compute = () => {
-  const suffix = (tag.split('-').at(1) ?? 'prod').toLowerCase();
+  const env = computeEnv();
 
-  if (suffix.startsWith('prod')) {
+  if (env.startsWith('prod')) {
     return process.env.FILE_STORAGE_BASE_URL_PROD;
   }
 
-  if (suffix.startsWith('rc')) {
+  if (env.startsWith('rc')) {
     return process.env.FILE_STORAGE_BASE_URL_RC;
   }
 

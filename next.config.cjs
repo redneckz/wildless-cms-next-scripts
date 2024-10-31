@@ -32,20 +32,44 @@ const devRewrites = [
 module.exports = async (phase, defaultConfig) => {
   const { computeEnv } = await import('./scripts/utils/computeEnv.js');
   const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
+  const { getBasePath } = await import('@redneckz/wildless-cms-uni-blocks/lib/utils/getBasePath');
   const { FILE_STORAGE_BASE_URL, WCMS_RESOURCES_BASE_URL } = await import('./scripts/utils/env.js');
+
+  const basePath = getBasePath(process.env.NEXT_PUBLIC_SITE_URL);
 
   /** @type {import('next').NextConfig} */
   const nextConfig = withBundleAnalyzer({
     enabled: process.env.ANALYZE === 'true',
   })({
     poweredByHeader: false,
+    basePath,
     ...defaultConfig,
+    publicRuntimeConfig: {
+      ...defaultConfig?.publicRuntimeConfig,
+      basePath,
+    },
     env: {
       ...defaultConfig?.env,
       ENV_STAND: computeEnv(),
       EXTRA_PATHS: await getExtraPages(),
       BUILD__FILE_STORAGE_BASE_URL: FILE_STORAGE_BASE_URL,
       BUILD__WCMS_RESOURCES_BASE_URL: WCMS_RESOURCES_BASE_URL,
+    },
+    async headers() {
+      const configHeaders = (await defaultConfig?.headers?.()) ?? [];
+
+      return [
+        ...configHeaders,
+        {
+          source: '/:path*',
+          headers: [
+            {
+              key: 'X-Frame-Options',
+              value: 'SAMEORIGIN',
+            },
+          ],
+        },
+      ];
     },
     async rewrites() {
       const configRewrites = (await defaultConfig?.rewrites?.()) ?? [];
