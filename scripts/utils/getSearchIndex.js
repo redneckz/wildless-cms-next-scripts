@@ -1,6 +1,6 @@
 import { getBasePath } from '@redneckz/wildless-cms-uni-blocks/lib/utils/getBasePath';
 import path from 'path';
-import { CONTENT_DIR } from '../dirs.js';
+import { CONTENT_DIR } from './env.js';
 import PorterStemmerRu from './stemmer.cjs';
 import { unique } from './unique.js';
 

@@ -3,7 +3,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import https from 'https';
 
 const PORT = 7001;
-const PROXY_HOST = 'https://10.80.4.9';
+const PROXY_HOST = 'https://first.rshb-ru.rc.rshbdev.ru';
 
 const app = express();
 
