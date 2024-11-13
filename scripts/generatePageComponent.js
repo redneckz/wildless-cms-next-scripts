@@ -2,10 +2,10 @@ import { Blocks } from '@redneckz/wildless-cms-uni-blocks/lib/components/Blocks'
 import { Blocks as MobileBlocks } from '@redneckz/wildless-cms-uni-blocks/mobile/lib/components/Blocks';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { CUSTOM_BLOCKS_DIR } from './dirs.js';
-import { unique } from './utils/unique.js';
 import { applyTmpl } from './utils/applyTmpl.js';
+import { CUSTOM_BLOCKS_DIR } from './utils/env.js';
 import { extractMobileType, extractType, getBlockTypes } from './utils/getBlockTypes.js';
+import { unique } from './utils/unique.js';
 
 dotenv.config();
 

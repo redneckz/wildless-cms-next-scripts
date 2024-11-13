@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { PUBLIC_DIR, UNIBLOCK_PACKAGE_DIR } from './dirs.js';
+import { PUBLIC_DIR, UNIBLOCK_PACKAGE_DIR } from './utils/env.js';
 
 const MOSCOW_TIME_OFFSET = 3;
 
