@@ -1,14 +1,21 @@
 import { execSync } from 'child_process';
-import { NEXT_DIR, PAGES_DIR } from './dirs.js';
-import generate from './generate.js';
+import copyExtra from './extra.js';
 import stats from './stats.js';
 import { gitClean } from './utils/gitClean.js';
 import { rmrf } from './utils/rmrf.js';
+import { generate } from './generate.js';
+import { NEXT_DIR, PAGES_DIR } from './dirs.js';
 
-export default async function build({ isMobile, sitemap }) {
+export default async function build({ isMobile, sitemap, ssg, extra, gen }) {
   await cleanup();
 
-  await generate({ isMobile });
+  if (gen) {
+    await generate({ isMobile, ssg });
+  }
+
+  if (extra) {
+    await copyExtra();
+  }
 
   try {
     await stats();
