@@ -35,12 +35,17 @@ export const generatePageComponent =
       (_) => `import { ${_} } from '@redneckz/wildless-cms-uni-blocks/lib/components/${_}/${_}';\n`,
     );
 
+    const normalizer = isMobile ? 'normalizeMobilePageData' : 'normalizePageData';
+
+    const normalizeImport = `import { ${normalizer} } from '@redneckz/wildless-cms-content';\n`;
+
     return applyTmpl(
       pageTmpl,
       {
-        imports: [...blockImports, ...customBlockImports].join(''),
+        imports: [normalizeImport, ...blockImports, ...customBlockImports].join(''),
         blocks: unique([...blockTypes, ...customBlockTypes]).join(', '),
         pagePath,
+        normalizer,
       },
       isMobile,
     );
