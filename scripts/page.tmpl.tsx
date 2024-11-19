@@ -1,4 +1,3 @@
-import { normalizePageData } from '@redneckz/wildless-cms-content';
 import { ContentPage } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/ContentPage';
 import { renderContentPageHead } from '@redneckz/wildless-cms-uni-blocks/lib/components/ContentPage/renderContentPageHead';
 import { useRouter } from '@redneckz/wildless-cms-uni-blocks/lib/external/useRouter';
@@ -34,7 +33,7 @@ export const getStaticProps: GetStaticProps = async () => ({
   props: {
     data: await getContentPageData(
       contentPageRepository.toSlug('/* pagePath */'),
-      normalizePageData,
+      /* normalizer */
     ),
   },
 });
