@@ -19,6 +19,7 @@ export async function generate({ isMobile, ssg }) {
 
   const pagesMap = await Promise.all(
     allSlugs
+      .filter(Boolean)
       .map(async (slug) => {
         try {
           console.log(slug, 'OK');
