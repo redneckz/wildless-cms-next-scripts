@@ -29,7 +29,7 @@ const devRewrites = [
  *
  * @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>}
  */
-module.exports = async (phase, defaultConfig) => {
+module.exports = async (phase, config) => {
   const { computeEnv } = await import('./scripts/utils/computeEnv.js');
   const { getExtraPages } = await import('./scripts/utils/getExtraPages.js');
   const { getBasePath } = await import('@redneckz/wildless-cms-uni-blocks/lib/utils/getBasePath');
@@ -40,12 +40,38 @@ module.exports = async (phase, defaultConfig) => {
   const basePath = getBasePath(process.env.NEXT_PUBLIC_SITE_URL);
 
   /** @type {import('next').NextConfig} */
-  const staticConfig = process.env.EXPORT
+  const defaultConfig = process.env.EXPORT
     ? {
         output: 'export',
         distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
       }
-    : {};
+    : {
+        async headers() {
+          const configHeaders = (await config?.headers?.()) ?? [];
+
+          return [
+            ...configHeaders,
+            {
+              source: '/:path*',
+              headers: [
+                {
+                  key: 'X-Frame-Options',
+                  value: 'SAMEORIGIN',
+                },
+              ],
+            },
+          ];
+        },
+        async rewrites() {
+          const configRewrites = (await config?.rewrites?.()) ?? [];
+
+          const combineRewrites = Array.isArray(configRewrites)
+            ? [...configRewrites, ...devRewrites]
+            : { ...configRewrites, beforeFiles: [...configRewrites.beforeFiles, ...devRewrites] };
+
+          return isDevelopment ? combineRewrites : configRewrites;
+        },
+      };
 
   /** @type {import('next').NextConfig} */
   const nextConfig = withBundleAnalyzer({
@@ -53,43 +79,18 @@ module.exports = async (phase, defaultConfig) => {
   })({
     poweredByHeader: false,
     basePath,
-    ...staticConfig,
     ...defaultConfig,
+    ...config,
     publicRuntimeConfig: {
-      ...defaultConfig?.publicRuntimeConfig,
+      ...config?.publicRuntimeConfig,
       basePath,
     },
     env: {
-      ...defaultConfig?.env,
+      ...config?.env,
       ENV_STAND: computeEnv(),
       EXTRA_PATHS: await getExtraPages(),
       BUILD__FILE_STORAGE_BASE_URL: FILE_STORAGE_BASE_URL,
       BUILD__WCMS_RESOURCES_BASE_URL: WCMS_RESOURCES_BASE_URL,
-    },
-    async headers() {
-      const configHeaders = (await defaultConfig?.headers?.()) ?? [];
-
-      return [
-        ...configHeaders,
-        {
-          source: '/:path*',
-          headers: [
-            {
-              key: 'X-Frame-Options',
-              value: 'SAMEORIGIN',
-            },
-          ],
-        },
-      ];
-    },
-    async rewrites() {
-      const configRewrites = (await defaultConfig?.rewrites?.()) ?? [];
-
-      const combineRewrites = Array.isArray(configRewrites)
-        ? [...configRewrites, ...devRewrites]
-        : { ...configRewrites, beforeFiles: [...configRewrites.beforeFiles, ...devRewrites] };
-
-      return isDevelopment ? combineRewrites : configRewrites;
     },
   });
 
