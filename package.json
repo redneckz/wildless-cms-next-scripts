@@ -34,7 +34,7 @@
     "@ducanh2912/next-pwa": "^10.2.8",
     "@next/bundle-analyzer": "^14.2.5",
     "@redneckz/uni-jsx": "latest",
-    "@redneckz/wildless-cms-content": "^0.0.13",
+    "@redneckz/wildless-cms-content": "^0.0.14",
     "@redneckz/wildless-cms-uni-blocks": "latest",
     "@rshbintech.ctp.rshb-ru/wcms-next-portal": "latest",
     "@types/node": "^20.14.10",

@@ -15,7 +15,12 @@ const PATH_DELIMITER = '/';
 const customPagePaths = (process.env.CUSTOM_PAGE_PATHS_REGISTRY ?? '').split(',').filter(Boolean);
 
 export async function generate({ isMobile, ssg }) {
-  const allSlugs = await contentPageRepository.listAllSlugs();
+  const allSlugs = (
+    await Promise.all([
+      contentPageRepository.listAllSlugs(),
+      ssg ? contentPageRepository.listErrorSlugs : [],
+    ])
+  ).flat();
 
   const pagesMap = await Promise.all(
     allSlugs
