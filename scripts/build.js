@@ -1,7 +1,10 @@
 import { execSync } from 'child_process';
+import dotenv from 'dotenv';
 import copyExtra from './extra.js';
 import { generate } from './generate.js';
 import stats from './stats.js';
+
+dotenv.config({ path: ['.env.local', '.env'] });
 
 export default async function build({ isMobile, sitemap, ssg, extra }) {
   try {

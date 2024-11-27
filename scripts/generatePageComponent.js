@@ -7,7 +7,7 @@ import { CUSTOM_BLOCKS_DIR } from './utils/env.js';
 import { extractMobileType, extractType, getBlockTypes } from './utils/getBlockTypes.js';
 import { unique } from './utils/unique.js';
 
-dotenv.config();
+dotenv.config({ path: ['.env.local', '.env'] });
 
 const pageTmpl = fs.readFileSync(new URL('./page.tmpl.tsx', import.meta.url), 'utf-8');
 
