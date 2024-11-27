@@ -18,7 +18,7 @@ export async function generate({ isMobile, ssg }) {
   const allSlugs = (
     await Promise.all([
       contentPageRepository.listAllSlugs(),
-      ssg ? contentPageRepository.listErrorSlugs : [],
+      ssg ? contentPageRepository.listErrorSlugs() : [],
     ])
   ).flat();
 
