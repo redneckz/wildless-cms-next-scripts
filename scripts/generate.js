@@ -22,19 +22,18 @@ export async function generate({ isMobile, ssg }) {
     ])
   ).flat();
 
-  const pagesMap = await Promise.all(
-    allSlugs
-      .filter(Boolean)
-      .map(async (slug) => {
+  const pagesMap = (
+    await Promise.all(
+      allSlugs.filter(Boolean).map(async (slug) => {
         try {
           console.log(slug, 'OK');
           return [slug.join(PATH_DELIMITER), await contentPageRepository.generatePage(slug)];
         } catch (ex) {
           console.warn('Failed to generate assets for', slug, ex);
         }
-      })
-      .filter(Boolean),
-  );
+      }),
+    )
+  ).filter(Boolean);
 
   if (ssg) {
     const relevantPagePaths = pagesMap.filter(
