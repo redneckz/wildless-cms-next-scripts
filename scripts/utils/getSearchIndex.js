@@ -1,3 +1,5 @@
+import { getBasePath } from '@redneckz/wildless-cms-uni-blocks/lib/utils/getBasePath';
+import path from 'path';
 import PorterStemmerRu from './stemmer.cjs';
 import { unique } from './unique.js';
 
@@ -13,12 +15,18 @@ export async function getSearchIndex(pages) {
     .reduce((a, b) => Object.assign(a, b), {});
 
   return {
-    corpus: pages.map(([uri, { title }]) => ({
-      uri,
+    corpus: pages.map(([uri, { title, slug }]) => ({
+      uri: getPageURI(uri, slug),
       title,
     })),
     dictionary,
   };
+}
+
+function getPageURI(uri) {
+  const basePath = getBasePath(process.env.NEXT_PUBLIC_SITE_URL);
+
+  return path.join(basePath, uri);
 }
 
 function extractTokens(data) {
