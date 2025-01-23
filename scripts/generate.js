@@ -26,10 +26,11 @@ export async function generate({ isMobile, ssg }) {
     await Promise.all(
       allSlugs.filter(Boolean).map(async (slug) => {
         try {
-          console.log(slug, 'OK');
           return [slug.join(PATH_DELIMITER), await contentPageRepository.generatePage(slug)];
         } catch (ex) {
           console.warn('Failed to generate assets for', slug, ex);
+        } finally {
+          console.log(slug, '... transform content OK');
         }
       }),
     )
@@ -57,7 +58,7 @@ function generatePageAndRelatedAssets(isMobile) {
       'utf-8',
     );
 
-    console.log(pagePath, 'OK');
+    console.log(pagePath, '... generate page OK');
   };
 }
 
