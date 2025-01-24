@@ -7,18 +7,17 @@ import { useRouter } from '@redneckz/wildless-cms-uni-blocks/lib/external/useRou
 import type { ContentPageDef } from '@redneckz/wildless-cms-uni-blocks/lib/model/ContentPageDef';
 import type { GetStaticProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter as nextUseRouter } from 'next/router';
+import { useRouter as nextUseRouter, usePathname } from 'next/navigation';
 /* imports */
 
 const blocksRegistry = {
   /* blocks */
 };
 
-useRouter.setup(() => {
-  const router = nextUseRouter();
-
-  return { ...router, href: globalThis.location?.href };
-});
+useRouter.setup(() => ({
+  ...nextUseRouter(),
+  pathname: usePathname(),
+}));
 
 const GenericPage: NextPage<{ data: ContentPageDef }> = ({ data }) => (
   <>
