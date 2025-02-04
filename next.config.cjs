@@ -43,7 +43,7 @@ module.exports = async (phase, config) => {
   const defaultConfig = process.env.EXPORT
     ? {
         output: 'export',
-        distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
+        distDir: `./${BUILD_DIR}`,
       }
     : {
         async headers() {

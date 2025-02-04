@@ -8,7 +8,6 @@ const [, , cmd] = process.argv;
 const task = timed(cmd, (await import(`./scripts/${cmd}.js`)).default);
 
 await task({
-  isMobile: process.argv.includes('--mobile'),
   sitemap: process.argv.includes('--sitemap'),
   extra: process.argv.includes('--extra'),
   ssg: process.argv.includes('--ssg'),

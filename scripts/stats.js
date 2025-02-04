@@ -59,11 +59,7 @@ const MAJOR_FEATURES = [
 const BLOCK_STATS_TABLE_HEAD = ['page', 'block', 'count', ...MAJOR_FEATURES.map(([name]) => name)];
 
 const AllBlockTypes = unique(
-  await Promise.allSettled(
-    ['/lib/components/Blocks.js', '/mobile/lib/components/Blocks.js'].map((_) =>
-      readFile(`${UNIBLOCK_PACKAGE_DIR}${_}`, 'utf-8'),
-    ),
-  ),
+  await readFile(`${UNIBLOCK_PACKAGE_DIR}/lib/components/Blocks.js`, 'utf-8'),
 )
   .filter(({ status }) => status === 'fulfilled')
   .flatMap(({ value }) => value.match(/\w+(?=,|\r*})/g));
