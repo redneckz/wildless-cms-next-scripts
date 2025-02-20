@@ -1,71 +1,37 @@
 import fs from 'fs';
-import path from 'path';
 import { promisify } from 'util';
-import { generatePageComponent } from './generatePageComponent.js';
 import { contentPageRepository } from './utils/contentPageRepository.js';
-import { PAGES_DIR, PUBLIC_DIR } from './utils/env.js';
+import { PUBLIC_DIR } from './utils/env.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
 
-const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 
 const SEARCH_INDEX_FILENAME = 'search.index.json';
 const PATH_DELIMITER = '/';
 
-const customPagePaths = (process.env.CUSTOM_PAGE_PATHS_REGISTRY ?? '').split(',').filter(Boolean);
-
-export async function generate({ isMobile, ssg }) {
+export async function generate() {
   const allSlugs = (
     await Promise.all([
       contentPageRepository.listAllSlugs(),
-      ssg ? contentPageRepository.listErrorSlugs() : [],
+      contentPageRepository.listErrorSlugs(),
     ])
   ).flat();
 
   const pagesMap = (
     await Promise.all(
-      allSlugs.filter(Boolean).map(async (slug) => {
+      allSlugs.filter(Boolean).map(async (_) => {
         try {
-          return [slug.join(PATH_DELIMITER), await contentPageRepository.generatePage(slug)];
+          return [_.join(PATH_DELIMITER), await contentPageRepository.generatePage(_)];
         } catch (ex) {
-          console.warn('Failed to generate assets for', slug, ex);
+          console.warn('Failed to generate assets for', _, ex);
         } finally {
-          console.log(slug, '... transform content OK');
+          console.log(_, '... transform content OK');
         }
       }),
     )
   ).filter(Boolean);
 
-  if (ssg) {
-    const relevantPagePaths = pagesMap.filter(
-      ([pagePath]) => !customPagePaths.some((_) => _ === pagePath),
-    );
-
-    await Promise.all(relevantPagePaths.map(generatePageAndRelatedAssets(isMobile)));
-  }
-
   await generateSearchIndex(pagesMap);
-}
-
-function generatePageAndRelatedAssets(isMobile) {
-  return async ([pagePath, page]) => {
-    const generatedPageComponentPath = toGeneratedPageComponentPath(pagePath);
-
-    await mkdir(path.dirname(generatedPageComponentPath), { recursive: true });
-    await writeFile(
-      generatedPageComponentPath,
-      generatePageComponent(isMobile)(page, pagePath),
-      'utf-8',
-    );
-
-    console.log(pagePath, '... generate page OK');
-  };
-}
-
-function toGeneratedPageComponentPath(pagePath) {
-  const pathWithExt = `${pagePath}.tsx`;
-
-  return path.join(PAGES_DIR, pathWithExt);
 }
 
 async function generateSearchIndex(pages) {

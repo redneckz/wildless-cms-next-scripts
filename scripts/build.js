@@ -5,21 +5,21 @@ import stats from './stats.js';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-export default async function build({ isMobile, sitemap, ssg, extra }) {
+export default async function build({ sitemap, extra }) {
   try {
     await stats();
   } catch (ex) {
     console.warn('Failed to generate stats', ex);
   }
 
-  await generate({ isMobile, ssg });
+  await generate();
 
   if (extra) {
     await copyExtra();
   }
 
   execSync('npx next build', { stdio: 'inherit' });
-  if (sitemap && ssg) {
+  if (sitemap) {
     execSync('npx next-sitemap', { stdio: 'inherit' });
   }
 }

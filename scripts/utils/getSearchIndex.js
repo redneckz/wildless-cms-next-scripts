@@ -15,8 +15,8 @@ export async function getSearchIndex(pages) {
     .reduce((a, b) => Object.assign(a, b), {});
 
   return {
-    corpus: pages.map(([uri, { title, slug }]) => ({
-      uri: getPageURI(uri, slug),
+    corpus: pages.map(([uri, { title }]) => ({
+      uri: getPageURI(uri),
       title,
     })),
     dictionary,

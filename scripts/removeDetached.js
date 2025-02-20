@@ -8,7 +8,7 @@ const readFile = promisify(fs.readFile);
 const lstat = promisify(fs.lstat);
 const unlink = promisify(fs.unlink);
 
-const isDetached = (contentList) => (path) => !contentList.some((_) => _.includes(basename(path)));
+const isDetached = (contentList) => (_) => !contentList.some((_) => _.includes(basename(_)));
 
 const DOC_EXT_LIST = ['json', 'md'];
 
