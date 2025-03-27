@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
 import { generatePageComponent } from './generatePageComponent.js';
+import { generatePortalResources } from './generatePortalResources.js';
 import { contentPageRepository } from './utils/contentPageRepository.js';
 import { PAGES_DIR, PUBLIC_DIR } from './utils/env.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
@@ -44,6 +45,7 @@ export async function generate({ isMobile, ssg }) {
     await Promise.all(relevantPagePaths.map(generatePageAndRelatedAssets(isMobile)));
   }
 
+  await generatePortalResources();
   await generateSearchIndex(pagesMap);
 }
 
