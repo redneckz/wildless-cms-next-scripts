@@ -78,7 +78,7 @@ module.exports = async (phase, config) => {
     enabled: process.env.ANALYZE === 'true',
   })({
     poweredByHeader: false,
-    basePath,
+    basePath: basePath === '/' ? '' : basePath,
     ...defaultConfig,
     ...config,
     publicRuntimeConfig: {
