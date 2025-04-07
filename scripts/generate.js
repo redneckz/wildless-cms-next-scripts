@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { promisify } from 'util';
+import { generatePortalResources } from './generatePortalResources.js';
 import { contentPageRepository } from './utils/contentPageRepository.js';
 import { PUBLIC_DIR } from './utils/env.js';
 import { getSearchIndex } from './utils/getSearchIndex.js';
@@ -31,6 +32,7 @@ export async function generate() {
     )
   ).filter(Boolean);
 
+  await generatePortalResources();
   await generateSearchIndex(pagesMap);
 }
 
