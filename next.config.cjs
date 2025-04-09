@@ -25,6 +25,8 @@ const devRewrites = [
   },
 ];
 
+const MAIN_SOURCE = '/:path*';
+
 /**
  *
  * @type {(phase: string, defaultConfig: import("next").NextConfig) => Promise<import("next").NextConfig>}
@@ -40,38 +42,47 @@ module.exports = async (phase, config) => {
   const basePath = getBasePath(process.env.NEXT_PUBLIC_SITE_URL);
 
   /** @type {import('next').NextConfig} */
-  const defaultConfig = process.env.EXPORT
-    ? {
-        output: 'export',
-        distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
-      }
-    : {
-        async headers() {
-          const configHeaders = (await config?.headers?.()) ?? [];
+  const defaultConfig = {
+    ...config,
+    ...(process.env.EXPORT
+      ? {
+          output: 'export',
+          distDir: `./${BUILD_DIR}/${process.env.NEXT_PUBLIC_MOBILE ? 'mobile/' : ''}`,
+        }
+      : {
+          async headers() {
+            const configHeaders = (await config?.headers?.()) ?? [];
+            const configHeadersWithoutMainSource = configHeaders.filter(
+              (_) => _.source !== MAIN_SOURCE,
+            );
+            const mainSourceHeaders =
+              configHeaders.find((_) => _.source === MAIN_SOURCE)?.headers ?? [];
 
-          return [
-            ...configHeaders,
-            {
-              source: '/:path*',
-              headers: [
-                {
-                  key: 'X-Frame-Options',
-                  value: 'SAMEORIGIN',
-                },
-              ],
-            },
-          ];
-        },
-        async rewrites() {
-          const configRewrites = (await config?.rewrites?.()) ?? [];
+            return [
+              ...configHeadersWithoutMainSource,
+              {
+                source: MAIN_SOURCE,
+                headers: [
+                  {
+                    key: 'X-Frame-Options',
+                    value: 'SAMEORIGIN',
+                  },
+                  ...mainSourceHeaders,
+                ],
+              },
+            ];
+          },
+          async rewrites() {
+            const configRewrites = (await config?.rewrites?.()) ?? [];
 
-          const combineRewrites = Array.isArray(configRewrites)
-            ? [...configRewrites, ...devRewrites]
-            : { ...configRewrites, beforeFiles: [...configRewrites.beforeFiles, ...devRewrites] };
+            const combineRewrites = Array.isArray(configRewrites)
+              ? [...configRewrites, ...devRewrites]
+              : { ...configRewrites, beforeFiles: [...configRewrites.beforeFiles, ...devRewrites] };
 
-          return isDevelopment ? combineRewrites : configRewrites;
-        },
-      };
+            return isDevelopment ? combineRewrites : configRewrites;
+          },
+        }),
+  };
 
   /** @type {import('next').NextConfig} */
   const nextConfig = withBundleAnalyzer({
@@ -80,7 +91,6 @@ module.exports = async (phase, config) => {
     poweredByHeader: false,
     basePath,
     ...defaultConfig,
-    ...config,
     publicRuntimeConfig: {
       ...config?.publicRuntimeConfig,
       basePath,
